@@ -22,6 +22,16 @@ import inui.utils.link;
 import std.format;
 import session.ver;
 
+import tinyfiledialogs;
+public import tinyfiledialogs : TFD_Filter;
+import std.string;
+
+version (linux) {
+    import dportals;
+    import dportals.filechooser;
+    import dportals.promise;
+}
+
 private {
     struct InochiWindowSettings {
         int width;
@@ -32,6 +42,58 @@ private {
         float scale;
     }
 }
+
+private {
+
+    version (linux) {
+        import bindbc.sdl;
+
+        string getWindowHandle(SDL_Window* window) {
+            SDL_SysWMinfo info;
+            SDL_GetWindowWMInfo(window, &info);
+            if (info.subsystem == SDL_SYSWM_TYPE.SDL_SYSWM_X11) {
+                import std.conv : to;
+
+                return "x11:" ~ info.info.x11.window.to!string(16);
+            }
+            return "";
+        }
+
+        FileFilter[] tfdToFileFilter(const(TFD_Filter)[] filters) {
+            FileFilter[] out_;
+
+            foreach (filter; filters) {
+                auto of = FileFilter(
+                    cast(string) filter.description.fromStringz,
+                    []
+                );
+
+                foreach (i, pattern; filter.patterns) {
+                    of.items ~= FileFilterItem(
+                        cast(uint) i,
+                        cast(string) pattern.fromStringz
+                    );
+                }
+
+                out_ ~= of;
+            }
+
+            return out_;
+        }
+
+        string uriFromPromise(Promise promise) {
+            if (promise.success) {
+                import std.array : replace;
+
+                string uri = promise.value["uris"].data.array[0].str;
+                uri = uri.replace("%20", " ");
+                return uri[7 .. $];
+            }
+            return null;
+        }
+    }
+}
+
 
 class InochiSessionWindow : InApplicationWindow {
 private:
@@ -49,6 +111,36 @@ private:
             }
         }
     }
+
+    string showOpenDialog(const(TFD_Filter)[] filters, string title = "Open...", ) {
+        version (linux) {
+            try {
+                FileOpenOptions op;
+                op.filters = tfdToFileFilter(filters);
+                auto parentWindow = getWindowHandle(this.uiGetWindowPtr());
+                auto promise = dpFileChooserOpenFile(parentWindow, title, op);
+                promise.await();
+                return promise.uriFromPromise();
+            } catch (Throwable ex) {
+
+                // FALLBACK: If xdg-desktop-portal is not available then try tinyfiledialogs.
+                c_str filename = tinyfd_openFileDialog(title.toStringz, "", filters, false);
+                if (filename !is null) {
+                    string file = cast(string) filename.fromStringz;
+                    return file;
+                }
+                return null;
+            }
+        } else {
+            c_str filename = tinyfd_openFileDialog(title.toStringz, "", filters, false);
+            if (filename !is null) {
+                string file = cast(string) filename.fromStringz;
+                return file;
+            }
+            return null;
+        }
+    }
+
 
 protected:
     override
@@ -77,6 +169,17 @@ protected:
                 }
 
                 if (uiImBeginMenu(__("File"))) {
+
+                    if (uiImMenuItem(__("Open"))) {
+                        const TFD_Filter[] filters = [
+                            { ["*.inp"], "Inochi2d Puppet (*.inp)" }
+                        ];
+
+                        string file = showOpenDialog(filters, _("Open..."));
+                        if (file) loadModels([file]);
+                    }
+
+                    uiImSeperator();
 
                     if (uiImMenuItem(__("Exit"))) {
                         this.close();
@@ -170,6 +273,7 @@ protected:
                 }
             uiImEndMainMenuBar();
         }
+        version(linux) dpUpdate();
     }
 
     override
@@ -212,5 +316,10 @@ public:
         version (InBranding) {
             logo = new Texture(ShallowTexture(cast(ubyte[])import("tex/logo.png")));
         }
+
+        version(linux) {
+            dpInit();
+        }
+
     }
 }
