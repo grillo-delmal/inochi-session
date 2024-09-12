@@ -6,7 +6,6 @@
 */
 module session.scene;
 import inochi2d;
-import inmath;
 import inui.input;
 import inui;
 import session.tracking;
