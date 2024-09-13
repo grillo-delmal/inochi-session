@@ -32,6 +32,9 @@ configuration "barebones" {
 	targetType "executable"
 
 	dependency "dportals" version="~>0.1.0"
+
+	subConfiguration "lumars" "lua51-dynamic"
+	versions "LUA_51"
 }
 
 
@@ -51,6 +54,9 @@ configuration "linux-full" {
 	versions "InBranding"
 	
 	dependency "dportals" version="~>0.1.0"
+
+	subConfiguration "lumars" "lua51-dynamic"
+	versions "LUA_51"
 }
 
 configuration "osx-full" {
@@ -84,6 +90,9 @@ configuration "linux-nightly" {
 	versions "InNightly"
 	
 	dependency "dportals" version="~>0.1.0"
+
+	subConfiguration "lumars" "lua51-dynamic"
+	versions "LUA_51"
 }
 
 // macOS nightly build
