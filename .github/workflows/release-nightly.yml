@@ -21,13 +21,6 @@ jobs:
       variant: 'nightly'
       generate_version: true
       do_package: true
-
-  steam-publish:
-    needs: build
-    uses: './.github/workflows/publish-steam.yml'
-    secrets: inherit
-    with:
-      branch: 'nightly'
   
   gh-publish:
     needs: build
