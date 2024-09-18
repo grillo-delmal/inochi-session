@@ -214,7 +214,7 @@ jobs:
       with:
         name: build-osx-dmg${{ inputs.postfix }}
         path: |
-          out/Install_Inochi_Creator.dmg
+          out/Install_Inochi_Session.dmg
           version.txt
         overwrite: true
         retention-days: 1

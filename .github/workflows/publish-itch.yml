@@ -30,7 +30,7 @@ jobs:
           - name: "macOS (DMG)"
             channel: 'osx'
             artifact: 'build-osx-dmg${{ inputs.postfix }}'
-            file: 'Install_Inochi_Creator.dmg'
+            file: 'Install_Inochi_Session.dmg'
 
           - name: "Linux"
             channel: 'linux'
