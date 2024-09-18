@@ -10,7 +10,8 @@ dependency "inui" version="~>1.2.1"
 dependency "lumars" version="~>1.6.1"
 dependency "bindbc-sdl" version="~>1.1.2"
 dependency "i18n-d" version="~>1.0.2"
-dependency "inochi2d" version="~>0.8.4"
+dependency "inochi2d" version="~>0.8.6"
+dependency "inmath" version="~>1.3.0"
 targetPath "out/"
 workingDirectory "out/"
 copyFiles "res/licenses/*"
@@ -38,11 +39,6 @@ configuration "barebones" {
 // Official build configurations.
 // Do not package your compilation of Inochi Creator with these configurations
 // unless you have prior permission from the Inochi2D project.
-configuration "meta" {
-	targetType "none"
-	preGenerateCommands "dub run gitver -- --prefix INS --file source/session/ver.d --mod session.ver --appname \"Inochi Session\" --itchfile version.txt"
-	preGenerateCommands "rc.exe /v build-aux\\windows\\inochi-session.rc" platform="windows"
-}
 
 configuration "linux-full" {
 	platforms "linux"
@@ -110,4 +106,17 @@ configuration "win32-nightly" {
 
 	lflags "/SUBSYSTEM:windows" "/ENTRY:mainCRTStartup" platform="window-dmd"
 	sourceFiles "build-aux\\windows\\inochi-session.res"
+}
+
+
+// Meta configurations
+
+configuration "update-version" {
+	targetType "none"
+	preGenerateCommands "dub run gitver -- --prefix INS --file source/session/ver.d --mod session.ver --appname \"Inochi Session\" --itchfile version.txt"
+}
+
+configuration "meta" {
+	targetType "none"
+	preGenerateCommands "rc.exe /v build-aux\\windows\\inochi-session.rc" platform="windows"
 }
