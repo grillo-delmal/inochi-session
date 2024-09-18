@@ -35,7 +35,7 @@ jobs:
   cleanup:
     if: 'always()'
     runs-on: ubuntu-latest
-    needs: [gh-publish, steam-publish]
+    needs: [gh-publish]
     steps:
     - uses: GeekyEggo/delete-artifact@v5
       with: 
