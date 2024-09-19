@@ -22,6 +22,9 @@ if [ -d "out/Inochi Session.app" ]; then
     cp ../LICENSE LICENSE
     cp -r "Inochi Session.app" "InstallVolume/Inochi Session.app"
     
+    # Downloaded artifact removes executable flag.
+    chmod +x "InstallVolume/Inochi Session.app/Contents/MacOS/inochi-session"
+    
     create-dmg \
         --volname "$DMGTITLE" \
         --volicon "InochiSession.icns" \
