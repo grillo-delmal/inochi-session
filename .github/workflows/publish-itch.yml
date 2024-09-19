@@ -28,7 +28,7 @@ jobs:
             file: 'inochi-session-osx.zip'
 
           - name: "macOS (DMG)"
-            channel: 'osx'
+            channel: 'osx-dmg'
             artifact: 'build-osx-dmg${{ inputs.postfix }}'
             file: 'Install_Inochi_Session.dmg'
 
