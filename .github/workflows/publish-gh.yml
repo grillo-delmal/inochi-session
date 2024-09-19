@@ -41,5 +41,5 @@ jobs:
           out/inochi-session-linux.zip
           out/inochi-session-win32.zip
           out/inochi-session-osx.zip
-          out/Install_Inochi_Creator.dmg
+          out/Install_Inochi_Session.dmg
         generate_release_notes: ${{ inputs.generate-notes }}
