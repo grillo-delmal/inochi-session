@@ -69,10 +69,30 @@ protected:
         uiImSeperator();
 
         
+
+        uiImLabelColored(_("Ambient Color"), vec4(0.8, 0.3, 0.3, 1));
         uiImIndent();
-            if (uiImColorButton3("###LIGHT_COLOR", &inSceneAmbientLight.vector)) {
-                inSettingsSet!(float[3])("ambientLight", inSceneAmbientLight.vector);
-            }
+            uiImIndent();
+                if (uiImColorButton3("###AMBIENTLIGHT_COLOR", &inSceneAmbientLight.vector)) {
+                    inSettingsSet!(float[3])("ambientLight", inSceneAmbientLight.vector);
+                }
+            uiImUnindent();
+        uiImUnindent();
+
+        uiImLabelColored(_("Scene Lighting"), vec4(0.8, 0.3, 0.3, 1));
+        uiImIndent();
+            uiImIndent();
+                if (uiImColorButton3("###LIGHT_COLOR", &inSceneLightColor.vector)) {
+                    inSettingsSet!(float[3])("lightColor", inSceneLightColor.vector);
+                }
+            uiImUnindent();
+
+            uiImIndent();
+                const(char)* lightDirName = "###LIGHT_DIR";
+                if (igSliderFloat3(lightDirName, &inSceneLightDirection.vector, -1, 1)) {
+                    inSettingsSet!(float[3])("lightDir", inSceneLightDirection.vector);
+                }
+            uiImUnindent();
         uiImUnindent();
 
         uiImLabelColored(_("Background Color"), vec4(0.8, 0.3, 0.3, 1));

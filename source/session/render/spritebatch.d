@@ -90,7 +90,7 @@ public:
         glBindBuffer(GL_ARRAY_BUFFER, buffer);
         glBufferData(GL_ARRAY_BUFFER, float.sizeof*data.length, data.ptr, GL_DYNAMIC_DRAW);
 
-        spriteBatchShader = new Shader(import("shaders/batch.vert"), import("shaders/batch.frag"));
+        spriteBatchShader = new Shader("batch", import("shaders/batch.vert"), import("shaders/batch.frag"));
         vp = spriteBatchShader.getUniformLocation("vp");
         updateVP();
     }

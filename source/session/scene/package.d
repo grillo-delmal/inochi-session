@@ -221,6 +221,12 @@ void insSceneInit() {
     float[3] ambientLight = inSettingsGet!(float[3])("ambientLight", [1, 1, 1]);
     inSceneAmbientLight.vector = ambientLight;
 
+    float[3] lightColor = inSettingsGet!(float[3])("lightColor", [1, 1, 1]);
+    inSceneLightColor.vector = lightColor;
+
+    float[3] lightDir = inSettingsGet!(float[3])("lightDir", [1, 1, 1]);
+    inSceneLightDirection.vector = lightDir;
+
     float[4] bgColor = inSettingsGet!(float[4])("bgColor", [0, 0, 0, 0]);
     inSetClearColor(bgColor[0], bgColor[1], bgColor[2], bgColor[3]);
 }
